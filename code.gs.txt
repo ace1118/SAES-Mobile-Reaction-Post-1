@@ -1,0 +1,33 @@
+var ss = SpreadsheetApp.openById('YOUR_SPREADSHEET_ID');
+var sheet = ss.getSheetByName('Sheet1'); // Change 'Sheet1' to your sheet name
+
+function doGet() {
+  return HtmlService.createHtmlOutputFromFile('index');
+}
+
+function updateCount(action) {
+  var count;
+  if (action === 'like') {
+    count = getLikeCount() + 1;
+    sheet.getRange('A3').setValue(count);
+  } else if (action === 'dislike') {
+    count = getDislikeCount() + 1;
+    sheet.getRange('B3').setValue(count);
+  }
+  return count;
+}
+
+function getCounts() {
+  return {
+    likeCount: getLikeCount(),
+    dislikeCount: getDislikeCount()
+  };
+}
+
+function getLikeCount() {
+  return sheet.getRange('A3').getValue() || 0;
+}
+
+function getDislikeCount() {
+  return sheet.getRange('B3').getValue() || 0;
+}

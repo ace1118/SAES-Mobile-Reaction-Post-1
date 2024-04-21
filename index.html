@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Like and Dislike Web App</title>
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: flex-start; /* Align items at the top */
+            overflow-y: hidden; /* Prevent vertical scrolling */
+            overflow-x: hidden; /* Prevent horizontal scrolling */
+        }
+        .reaction {
+            display: flex;
+            margin-bottom: 20px;
+        }
+        .reaction button {
+            margin: 10px; /* Increase margin for larger touch area */
+            padding: 10px 10px; /* Increase padding for larger tap target */
+            font-size: 18px; /* Increase font size for better readability */
+            background-color: #eee; /* Light gray background */
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease; /* Smooth transition for touch feedback */
+        }
+        .reaction button:hover {
+            background-color: #ddd; /* Darker gray on hover for touch feedback */
+        }
+        .counter {
+            display: inline-block;
+            margin-left: 5px; /* Add margin between icon and counter */
+            font-size: 16px; /* Reduce font size for counter */
+            color: #555; /* Dark gray color for counter */
+        }
+    </style>
+</head>
+<body>
+    <div class="body">
+        <div class="reaction">
+            <button onclick="like()">👍 <span class="counter" id="likeCount">0</span></button>
+            <span>&nbsp;</span> <!-- Spacer -->
+            <button onclick="dislike()">👎 <span class="counter" id="dislikeCount">0</span></button>
+        </div>
+    </div>
+
+    <script>
+        function like() {
+            updateLikeCount(parseInt(document.getElementById("likeCount").textContent) + 1);
+            updateGoogleSheet('like');
+        }
+
+        function dislike() {
+            updateDislikeCount(parseInt(document.getElementById("dislikeCount").textContent) + 1);
+            updateGoogleSheet('dislike');
+        }
+
+        function updateLikeCount(likeCount) {
+            document.getElementById("likeCount").textContent = likeCount;
+        }
+
+        function updateDislikeCount(dislikeCount) {
+            document.getElementById("dislikeCount").textContent = dislikeCount;
+        }
+
+        function updateGoogleSheet(action) {
+            fetch('/updateSheet?action=' + action)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log(data); // For debugging
+                })
+                .catch(error => {
+                    console.error('There was a problem with the fetch operation:', error);
+                });
+        }
+
+        // Initial fetch of counts
+        fetch('/getCounts')
+            .then(response => response.json())
+            .then(data => {
+                updateLikeCount(data.likeCount);
+                updateDislikeCount(data.dislikeCount);
+            })
+            .catch(error => {
+                console.error('There was a problem with the fetch operation:', error);
+            });
+    </script>
+</body>
+</html>
