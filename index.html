@@ -10,18 +10,25 @@
             margin: 0;
             padding: 0;
             display: flex;
-            flex-wrap: wrap;
+            justify-content: flex-start; /* Align items on the left */
             align-items: flex-start; /* Align items at the top */
-            overflow-y: hidden; /* Prevent vertical scrolling */
-            overflow-x: hidden; /* Prevent horizontal scrolling */
+            height: 100vh;
+            overflow-x: hidden;
+        }
+        .wrapper {
+            max-width: 80%; /* Adjust the maximum width as needed */
+            text-align: center;
+            overflow-x: hidden; /* Enable vertical scrolling if content exceeds viewport height */
         }
         .reaction {
             display: flex;
+            flex-wrap: wrap;
             margin-bottom: 20px;
         }
         .reaction button {
             margin: 10px; /* Increase margin for larger touch area */
-            padding: 10px 10px; /* Increase padding for larger tap target */
+            padding: 15px 20px; /* Increase padding for larger tap target */
+            white-space: nowrap;
             font-size: 18px; /* Increase font size for better readability */
             background-color: #eee; /* Light gray background */
             border: none;
@@ -41,7 +48,7 @@
     </style>
 </head>
 <body>
-    <div class="body">
+    <div class="wrapper">
         <div class="reaction">
             <button onclick="like()">👍 <span class="counter" id="likeCount">0</span></button>
             <span>&nbsp;</span> <!-- Spacer -->
@@ -51,13 +58,11 @@
 
     <script>
         function like() {
-            google.script.run.like();
-            updateLikeCount(parseInt(document.getElementById("likeCount").textContent) + 1);
+            google.script.run.withSuccessHandler(updateLikeCount).like();
         }
 
         function dislike() {
-            google.script.run.dislike();
-            updateDislikeCount(parseInt(document.getElementById("dislikeCount").textContent) + 1);
+            google.script.run.withSuccessHandler(updateDislikeCount).dislike();
         }
 
         function updateLikeCount(likeCount) {

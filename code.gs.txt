@@ -1,4 +1,4 @@
-var ss = SpreadsheetApp.openById('1Z2ib3XvB4k3s4g99eYDLGdwE28NkEg5no9wlOWZOP4g');
+var ss = SpreadsheetApp.openById('17wfNaLu9f0ZfIr4EUwS06dZEIntKarZE91O-v37FaFQ');
 var sheet = ss.getSheetByName('Sheet1'); // Change 'Sheet1' to your sheet name
 
 function doGet() {
@@ -24,5 +24,5 @@ function getLikeCount() {
 }
 
 function getDislikeCount() {
-  return sheet.getRange('').getValue() || 0;
+  return sheet.getRange('B3').getValue() || 0;
 }
