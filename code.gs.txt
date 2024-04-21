@@ -5,23 +5,18 @@ function doGet() {
   return HtmlService.createHtmlOutputFromFile('index');
 }
 
-function updateCount(action) {
-  var count;
-  if (action === 'like') {
-    count = getLikeCount() + 1;
-    sheet.getRange('A3').setValue(count);
-  } else if (action === 'dislike') {
-    count = getDislikeCount() + 1;
-    sheet.getRange('B3').setValue(count);
-  }
-  return count;
+function like() {
+  var likeCount = getLikeCount();
+  likeCount++;
+  sheet.getRange('A3').setValue(likeCount);
+  return likeCount;
 }
 
-function getCounts() {
-  return {
-    likeCount: getLikeCount(),
-    dislikeCount: getDislikeCount()
-  };
+function dislike() {
+  var dislikeCount = getDislikeCount();
+  dislikeCount++;
+  sheet.getRange('B3').setValue(dislikeCount);
+  return dislikeCount;
 }
 
 function getLikeCount() {
@@ -29,5 +24,5 @@ function getLikeCount() {
 }
 
 function getDislikeCount() {
-  return sheet.getRange('B3').getValue() || 0;
+  return sheet.getRange('').getValue() || 0;
 }

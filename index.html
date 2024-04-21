@@ -51,13 +51,13 @@
 
     <script>
         function like() {
+            google.script.run.like();
             updateLikeCount(parseInt(document.getElementById("likeCount").textContent) + 1);
-            updateGoogleSheet('like');
         }
 
         function dislike() {
+            google.script.run.dislike();
             updateDislikeCount(parseInt(document.getElementById("dislikeCount").textContent) + 1);
-            updateGoogleSheet('dislike');
         }
 
         function updateLikeCount(likeCount) {
@@ -68,32 +68,14 @@
             document.getElementById("dislikeCount").textContent = dislikeCount;
         }
 
-        function updateGoogleSheet(action) {
-            fetch('/updateSheet?action=' + action)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    console.log(data); // For debugging
-                })
-                .catch(error => {
-                    console.error('There was a problem with the fetch operation:', error);
-                });
+        function refreshCounts() {
+            google.script.run.withSuccessHandler(updateLikeCount).getLikeCount();
+            google.script.run.withSuccessHandler(updateDislikeCount).getDislikeCount();
         }
 
         // Initial fetch of counts
-        fetch('/getCounts')
-            .then(response => response.json())
-            .then(data => {
-                updateLikeCount(data.likeCount);
-                updateDislikeCount(data.dislikeCount);
-            })
-            .catch(error => {
-                console.error('There was a problem with the fetch operation:', error);
-            });
+        refreshCounts();
     </script>
+
 </body>
 </html>
